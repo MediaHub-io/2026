@@ -1,122 +1,195 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MediaHub | Streaming</title>
-    <link rel="icon" href="favicon.jpg" type="image/jpeg">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="MediaHub - Plataforma de streaming de series y anime">
+<title>MediaHub | Streaming</title>
+<link rel="icon" href="favicon.jpg" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="auth-screen" id="authScreen">
-        <div class="auth-box">
-            <div class="auth-logo">
-                <img src="favicon.jpg" alt="Logo" style="width: 50px; height: 50px; border-radius: 50%;">
-                <span>MediaHub</span>
-            </div>
-            <h1 class="auth-title">Bienvenido</h1>
-            <p class="auth-subtitle">Ingresa tu nombre para comenzar</p>
-            <form id="authForm">
-                <div class="form-group">
-                    <input type="text" id="userName" class="form-input" placeholder="Tu nombre" required autocomplete="off">
-                </div>
-                <button type="submit" class="auth-btn">Entrar</button>
-            </form>
-        </div>
-    </div>
-    <header class="compact-header hidden" id="mainHeader">
-        <div class="header-content">
-            <a href="#" class="logo">
-                <img src="favicon.jpg" alt="Logo" style="width: 40px; height: 40px; border-radius: 50%;">
-                <span>MediaHub</span>
-            </a>
-            <div class="user-wallet">
-                <div class="user-info" id="userInfo">
-                    <div class="user-avatar" id="userAvatar">U</div>
-                    <div>
-                        <div id="userDisplayName">Usuario</div>
-                        <div class="user-coins" id="userCoins">300 monedas</div>
-                    </div>
-                </div>
-                <div class="coins-display">
-                    <i class="fas fa-coins"></i>
-                    <span class="coins-amount" id="coinsAmount">300</span>
-                </div>
-            </div>
-            <div class="nav-controls">
-                <div class="nav-tabs">
-                    <button class="tab-btn active" data-section="series">Series</button>
-                    <button class="tab-btn" data-section="anime">Anime</button>
-                    <button class="tab-btn" data-section="favorites" id="favoritesTab">Favoritos</button>
-                </div>
-                <button class="logout-btn" id="logoutBtn">Salir</button>
-            </div>
-        </div>
-    </header>
-    <section class="hero hidden" id="heroSection">
-        <div class="hero-content">
-            <h1>Tu plataforma de streaming</h1>
-            <p>Series y anime ilimitados. Desbloquea contenido con monedas.</p>
-            <div class="hero-actions">
-                <div class="daily-bonus" id="dailyBonus">
-                    <span>Reclamar bono diario (+10)</span>
-                </div>
-            </div>
-        </div>
-    </section>
-    <main class="main-content hidden" id="mainContent">
-        <section class="content-section" id="seriesSection">
-            <div class="section-header">
-                <h2 class="section-title">Series Populares</h2>
-                <div class="section-controls">
-                    <div class="price-tag">25 monedas</div>
-                </div>
-            </div>
-            <div class="content-grid" id="seriesGrid"></div>
-        </section>
-        <section class="content-section hidden" id="animeSection">
-            <div class="section-header">
-                <h2 class="section-title">Anime Destacado</h2>
-                <div class="section-controls">
-                    <div class="price-tag">25 monedas</div>
-                </div>
-            </div>
-            <div class="content-grid" id="animeGrid"></div>
-        </section>
-        <section class="content-section hidden" id="favoritesSection">
-            <div class="section-header">
-                <h2 class="section-title">Mis Favoritos</h2>
-                <div class="section-controls">
-                    <button class="clear-btn" id="clearFavorites">Limpiar</button>
-                </div>
-            </div>
-            <div class="content-grid" id="favoritesGrid"></div>
-        </section>
-    </main>
-    <div class="modal hidden" id="contentModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" id="modalTitle">Título</h2>
-                <button class="close-modal" id="closeModal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <img id="modalPoster" src="" alt="Poster" class="modal-poster">
-                <div class="modal-info">
-                    <p id="modalDescription"></p>
-                </div>
-                <div class="modal-actions">
-                    <button class="modal-btn watch-btn" id="modalWatchBtn">Ver ahora</button>
-                    <button class="modal-btn unlock-btn" id="modalUnlockBtn">Desbloquear</button>
-                    <button class="modal-btn favorite-btn" id="modalFavoriteBtn">Favorito</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="loading-overlay hidden" id="loadingOverlay">
-        <p>Cargando...</p>
-    </div>
-    <div id="notificationContainer"></div>
-    <script src="script.js" defer></script>
+<div class="auth-screen" id="authScreen">
+<div class="auth-box">
+<div class="auth-logo">
+<img src="favicon.jpg" alt="MediaHub Logo" class="logo-img">
+<span>MediaHub</span>
+</div>
+<h1 class="auth-title">Bienvenido</h1>
+<p class="auth-subtitle">Ingresa tu nombre para comenzar</p>
+<form id="authForm">
+<div class="form-group">
+<input type="text" id="userName" class="form-input" placeholder="Tu nombre" required autocomplete="off">
+</div>
+<button type="submit" class="auth-btn">
+<i class="fas fa-play"></i> Entrar
+</button>
+<p class="bonus-info">¡Nuevos usuarios reciben 300 monedas de regalo!</p>
+</form>
+</div>
+</div>
+<header class="compact-header hidden" id="mainHeader">
+<div class="header-content">
+<a href="#" class="logo">
+<img src="favicon.jpg" alt="MediaHub" class="logo-img">
+<span>MediaHub</span>
+</a>
+<div class="user-wallet">
+<div class="user-info" id="userInfo">
+<div class="user-avatar" id="userAvatar">U</div>
+<div>
+<div id="userDisplayName">Usuario</div>
+<div class="user-coins" id="userCoins">0 monedas</div>
+</div>
+</div>
+<div class="coins-display">
+<i class="fas fa-coins coins-icon"></i>
+<span class="coins-amount" id="coinsAmount">0</span>
+</div>
+</div>
+<div class="nav-controls">
+<div class="nav-tabs">
+<button class="tab-btn active" data-section="series">
+<i class="fas fa-tv"></i> Series
+</button>
+<button class="tab-btn" data-section="anime">
+<i class="fas fa-ghost"></i> Anime
+</button>
+</div>
+<button class="logout-btn" id="logoutBtn">
+<i class="fas fa-sign-out-alt"></i> Salir
+</button>
+</div>
+</div>
+</header>
+<section class="hero hidden" id="heroSection">
+<div class="hero-content">
+<h1>Tu plataforma de streaming</h1>
+<p>Series y anime ilimitados. Desbloquea contenido con monedas.</p>
+<div class="hero-actions">
+<button class="daily-bonus" id="dailyBonus">
+<i class="fas fa-gift"></i>
+<span>Reclamar bonificación diaria (+10)</span>
+</button>
+<button class="info-btn" id="infoBtn">
+<i class="fas fa-info-circle"></i>
+</button>
+</div>
+</div>
+</section>
+<main class="main-content hidden" id="mainContent">
+<section class="content-section" id="seriesSection">
+<div class="section-header">
+<h2 class="section-title">
+<i class="fas fa-tv"></i> Series Populares
+</h2>
+<div class="section-controls">
+<div class="price-tag">
+<i class="fas fa-coins"></i>
+<span>25 monedas</span>
+</div>
+<button class="refresh-btn" id="refreshSeries">
+<i class="fas fa-sync-alt"></i>
+</button>
+</div>
+</div>
+<div class="content-grid" id="seriesGrid"></div>
+</section>
+<section class="content-section hidden" id="animeSection">
+<div class="section-header">
+<h2 class="section-title">
+<i class="fas fa-ghost"></i> Anime Destacado
+</h2>
+<div class="section-controls">
+<div class="price-tag">
+<i class="fas fa-coins"></i>
+<span>25 monedas</span>
+</div>
+<button class="refresh-btn" id="refreshAnime">
+<i class="fas fa-sync-alt"></i>
+</button>
+</div>
+</div>
+<div class="content-grid" id="animeGrid"></div>
+</section>
+</main>
+<div class="modal hidden" id="contentModal">
+<div class="modal-content">
+<div class="modal-header">
+<h2 class="modal-title" id="modalTitle">Título</h2>
+<button class="close-modal" id="closeModal">&times;</button>
+</div>
+<div class="modal-body">
+<div class="modal-poster-container">
+<img id="modalPoster" src="" alt="Poster" class="modal-poster">
+<div class="modal-badge" id="modalBadge"></div>
+</div>
+<div class="modal-info">
+<div class="info-item">
+<span class="info-label">Tipo</span>
+<span class="info-value" id="modalType">-</span>
+</div>
+<div class="info-item">
+<span class="info-label">Género</span>
+<span class="info-value" id="modalGenre">-</span>
+</div>
+<div class="info-item">
+<span class="info-label">Calificación</span>
+<span class="info-value" id="modalRating">-</span>
+</div>
+<div class="info-item">
+<span class="info-label">Estado</span>
+<span class="info-value" id="modalStatus">-</span>
+</div>
+</div>
+<p class="modal-description" id="modalDescription">Descripción no disponible.</p>
+<div class="modal-actions">
+<button class="modal-btn watch-btn" id="modalWatchBtn">
+<i class="fas fa-play"></i> Ver ahora
+</button>
+<button class="modal-btn unlock-btn" id="modalUnlockBtn">
+<i class="fas fa-unlock"></i> Desbloquear
+</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal hidden" id="unlockModal">
+<div class="modal-content small-modal">
+<div class="modal-header">
+<h2 class="modal-title">Confirmar Desbloqueo</h2>
+<button class="close-modal" id="closeUnlockModal">&times;</button>
+</div>
+<div class="modal-body">
+<p id="unlockMessage">¿Desbloquear este contenido por 25 monedas?</p>
+<div class="modal-actions">
+<button class="modal-btn cancel-btn" id="cancelUnlock">
+<i class="fas fa-times"></i> Cancelar
+</button>
+<button class="modal-btn unlock-confirm-btn" id="confirmUnlock">
+<i class="fas fa-unlock"></i> Desbloquear
+</button>
+</div>
+</div>
+</div>
+</div>
+<div class="loading-overlay hidden" id="loadingOverlay">
+<div class="spinner"></div>
+<p>Cargando...</p>
+</div>
+<div id="notificationContainer"></div>
+<footer class="footer hidden" id="mainFooter">
+<div class="footer-content">
+<p>Síguenos en nuestro canal oficial de WhatsApp</p>
+<a href="https://whatsapp.com/channel/0029Vb7Q9xa7IUYQbCEnOz3a" target="_blank" class="whatsapp-btn">
+<i class="fab fa-whatsapp"></i> Únete al canal oficial
+</a>
+</div>
+</footer>
+<script src="script.js" defer></script>
 </body>
 </html>
