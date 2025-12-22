@@ -97,6 +97,18 @@ elements.loadingOverlay.classList.add('hidden');
 },
 displayFavorites(){
 elements.favoritesGrid.innerHTML=favoriteContent.size===0?'<p>No hay favoritos</p>':'<p>Tienes '+favoriteContent.size+' favoritos</p>';
+},
+showModal(item,type){
+currentModalContent={item,type};
+const id=item.id||item.mal_id;
+const isUnlocked=unlockedContent.has(`${type}_${id}`);
+elements.modalTitle.textContent=isUnlocked?(item.name||item.title):'Contenido Bloqueado';
+elements.modalPoster.src=item.image?.original||item.images?.jpg?.large_image_url;
+elements.modalDescription.textContent=isUnlocked?(item.summary?.replace(/<[^>]*>/g,'')||item.synopsis||'Sin descripción.'):'Desbloquea para ver los detalles.';
+elements.modalWatchBtn.classList.toggle('hidden',!isUnlocked);
+elements.modalUnlockBtn.classList.toggle('hidden',isUnlocked);
+elements.modalFavoriteBtn.textContent=favoriteContent.has(`${type}_${id}`)?'Quitar Favorito':'Añadir Favorito';
+elements.contentModal.classList.remove('hidden');
 }
 };
 const contentManager={
@@ -119,29 +131,42 @@ const isUnlocked=unlockedContent.has(`${type}_${id}`);
 const div=document.createElement('div');
 div.className='content-card';
 div.innerHTML=`
-<img src="${item.image?.medium||item.images?.jpg?.image_url}" style="width:100%">
+<img src="${item.image?.medium||item.images?.jpg?.image_url}" alt="${title}">
 <h3>${isUnlocked?title:'Bloqueado'}</h3>
-<button onclick="unlockContent('${type}',${id})">${isUnlocked?'Ver':'Desbloquear (25)'}</button>
+<button onclick="handleContentClick('${type}',${JSON.stringify(item).replace(/"/g,'&quot;')})">${isUnlocked?'Ver':'Detalles'}</button>
 `;
 grid.appendChild(div);
 });
 }
 };
-function unlockContent(type,id){
-if(unlockedContent.has(`${type}_${id}`)){
-ui.showNotification('Ya desbloqueado');
-return;
+function handleContentClick(type,item){
+ui.showModal(item,type);
 }
+function unlockContent(){
+if(!currentModalContent)return;
+const {item,type}=currentModalContent;
+const id=item.id||item.mal_id;
 if(currentUser.coins>=CONFIG.UNLOCK_COST){
 currentUser.coins-=CONFIG.UNLOCK_COST;
 unlockedContent.add(`${type}_${id}`);
 stateManager.updateCoinsDisplay();
 stateManager.saveUserData();
 ui.showNotification('Desbloqueado con éxito','success');
-ui.showPlatform();
+ui.showModal(item,type);
+ui.loadInitialContent();
 }else{
 ui.showNotification('Monedas insuficientes','error');
 }
+}
+function toggleFavorite(){
+if(!currentModalContent)return;
+const {item,type}=currentModalContent;
+const id=item.id||item.mal_id;
+const key=`${type}_${id}`;
+if(favoriteContent.has(key))favoriteContent.delete(key);
+else favoriteContent.add(key);
+stateManager.saveUserData();
+ui.showModal(item,type);
 }
 function claimDailyBonus(){
 const today=new Date().toDateString();
@@ -177,4 +202,7 @@ elements.mainContent.classList.add('hidden');
 });
 elements.dailyBonusBtn.addEventListener('click',claimDailyBonus);
 elements.tabBtns.forEach(b=>b.addEventListener('click',()=>ui.showSection(b.dataset.section)));
+elements.closeModal.addEventListener('click',()=>elements.contentModal.classList.add('hidden'));
+elements.modalUnlockBtn.addEventListener('click',unlockContent);
+elements.modalFavoriteBtn.addEventListener('click',toggleFavorite);
 if(stateManager.loadUserData())ui.showPlatform();
